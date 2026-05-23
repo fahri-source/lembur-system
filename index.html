@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Antrian Lembur Filling Shift</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h2 class="title">Sistem Jadwal Lembur Bergilir</h2>
+    
+    <!-- Informasi Antrian -->
+    <div class="queue-info">
+        <h3>Prioritas Antrian Saat Ini:</h3>
+        <p id="currentQueue"></p>
+        <small>*Nama yang dicetak tebal adalah kandidat utama untuk lembur berikutnya.</small>
+    </div>
+
+    <!-- Form Input -->
+    <form id="formLembur">
+        <div class="form-grid">
+            
+            <!-- Kolom Kiri: Tanggal & Karyawan Inti -->
+            <div class="form-left">
+                <div class="input-group">
+                    <label>Tanggal Lembur:</label>
+                    <input type="date" id="tanggal" required>
+                </div>
+                <div class="input-group">
+                    <label>Shift:</label>
+                    <select id="shift" required>
+                        <option value="1">Shift 1</option>
+                        <option value="2">Shift 2</option>
+                    </select>
+                </div>
+
+                <div class="input-group" style="margin-top: 20px;">
+                    <label>Karyawan Inti Tidak Masuk (Ceklis yang absen):</label>
+                    <div id="intiContainer" class="inti-grid">
+                        <!-- Checkbox otomatis dirender JS -->
+                    </div>
+                    <small>Sistem otomatis mencari pengganti inti (Hijau) dari daftar cadangan/libur hari ini.</small>
+                </div>
+            </div>
+
+            <!-- Kolom Kanan: Status Karyawan -->
+            <div class="form-right">
+                <label>Status Kehadiran Daftar Karyawan:</label>
+                <div class="table-responsive">
+                    <table class="input-table">
+                        <thead>
+                            <tr>
+                                <th>Nama Karyawan</th>
+                                <th>Hadir</th>
+                                <th>Izin</th>
+                                <th>Setengah Hari / Libur</th>
+                            </tr>
+                        </thead>
+                        <tbody id="karyawanContainer">
+                            <!-- Radio buttons otomatis dirender JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+        
+        <div class="action-bar">
+            <button type="submit" class="btn btn-primary">Generate Jadwal Excel</button>
+            <button type="button" class="btn btn-danger" onclick="resetSemua()">Reset Semua Data</button>
+        </div>
+    </form>
+
+    <!-- Tabel Hasil (Mirip Excel) -->
+    <div class="table-responsive excel-container">
+        <table id="excelTable">
+            <thead id="tableHead">
+                <!-- Header dirender JS -->
+            </thead>
+            <tbody id="tableBody">
+                <!-- Data dirender JS -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

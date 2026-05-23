@@ -1,0 +1,131 @@
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f0f2f5;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.title {
+    margin-top: 0;
+    border-bottom: 2px solid #0056b3;
+    padding-bottom: 10px;
+}
+
+.queue-info {
+    background: #e9ecef;
+    padding: 15px;
+    border-left: 5px solid #0056b3;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.queue-info h3 { margin: 0 0 10px 0; font-size: 16px;}
+.queue-info p { margin: 0; line-height: 1.6; }
+
+.form-grid {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.form-left, .form-right {
+    flex: 1;
+    min-width: 300px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+.input-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+.input-group input[type="date"], .input-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.inti-grid {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.inti-grid label {
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: normal;
+}
+
+/* Tabel Input Kehadiran */
+.table-responsive {
+    overflow-x: auto;
+}
+.input-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.input-table th, .input-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+.input-table th { background: #f4f4f4; }
+.input-table td:first-child { text-align: left; font-weight: bold; }
+
+/* Buttons */
+.action-bar { margin-bottom: 30px; display: flex; gap: 10px; }
+.btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.btn-primary { background: #007bff; color: white; }
+.btn-primary:hover { background: #0056b3; }
+.btn-danger { background: #dc3545; color: white; }
+.btn-danger:hover { background: #a71d2a; }
+
+/* --- TABEL EXCEL STYLE --- */
+.excel-container {
+    border: 1px solid #000;
+}
+#excelTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+#excelTable th, #excelTable td {
+    border: 1px solid #000;
+    padding: 10px;
+    text-align: center;
+    white-space: nowrap;
+}
+#excelTable th { background-color: #d9e1f2; }
+
+/* Pewarnaan Indikator Logika */
+.normal { font-weight: bold; }
+.hijau { background-color: #c6efce !important; color: #006100; font-weight: bold; }
+.merah { background-color: #ffc7ce !important; color: #9c0006; font-weight: bold; }
+.merah-silang { background-color: #ffc7ce !important; color: black; font-weight: bold; font-size: 16px; }
