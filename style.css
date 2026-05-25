@@ -351,3 +351,114 @@ body.dark-mode .modal-table td {
 body.dark-mode .modal-table tbody tr:nth-child(even) {
     background-color: #242424;
 }
+/* ==========================================================================
+   DESAIN RESPONSIF (MOBILE & TABLET FRIENDLY)
+   ========================================================================== */
+
+/* 1. Aturan Global untuk Layar Kecil */
+@media screen and (max-width: 768px) {
+    body {
+        padding: 10px; /* Mengurangi padding luar agar space lebih luas */
+    }
+
+    .container {
+        padding: 15px;
+        border-radius: 6px;
+    }
+
+    /* Form Grid yang tadinya bersebelahan menjadi bertumpuk vertikal */
+    .form-grid {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .form-left, .form-right {
+        width: 100%;
+        min-width: 100%;
+    }
+
+    /* Action bar (Tombol Generate/Reset/Detail) menumpuk rapi */
+    .action-bar {
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .action-bar .btn {
+        width: 100%; /* Tombol memenuhi lebar layar HP */
+        padding: 12px; /* Lebih mudah ditekan dengan jari */
+        font-size: 15px;
+    }
+
+    /* Grid Detail Panel informasi bawah */
+    .detail-grid {
+        grid-template-columns: 1fr; /* Menjadi 1 kolom saja di HP */
+    }
+
+    .detail-card.full-width {
+        grid-column: span 1; /* Reset span agar tidak merusak layout */
+    }
+    
+    .detail-card strong {
+        display: block; /* Judul info di atas, isinya di bawah */
+        width: 100%;
+        margin-bottom: 4px;
+    }
+
+    /* 2. Pengaturan khusus Karyawan Inti (Checkbox Grid) */
+    #intiContainer {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 8px;
+    }
+
+    /* 3. Pengaturan Tabel Input Kehadiran agar Tidak Meluber */
+    .input-table {
+        display: block;
+        overflow-x: auto; /* Bisa di-geser/swipe kanan-kiri jika teks panjang */
+        white-space: nowrap;
+    }
+}
+
+/* 2. Optimasi Khusus Ukuran Smartphone Sangat Kecil (Lebar < 480px) */
+@media screen and (max-width: 480px) {
+    .title {
+        font-size: 20px;
+        text-align: center;
+    }
+
+    .queue-info h3 {
+        font-size: 14px;
+    }
+
+    /* Pengondisian Modal Pop-Up di HP */
+    .modal-content {
+        width: 95%;
+        padding: 15px;
+        margin: 0 10px;
+    }
+
+    .modal-table-responsive {
+        max-height: 280px; /* Mengurangi tinggi scroll modal di HP */
+    }
+
+    .modal-table th, .modal-table td {
+        padding: 8px; /* Memperkecil padding tabel modal agar pas */
+        font-size: 13px;
+    }
+}
+
+/* 3. Pengaman Pembungkus Tabel Hasil Utama (Excel Table) */
+/* Pastikan pembungkus tabel Anda memiliki rule ini agar bisa di-scroll di perangkat sentuh */
+.excel-container, .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* Scroll yang mulus di iOS/Android */
+    margin-top: 15px;
+    border-radius: 6px;
+    border: 1px solid #dfe3ee;
+}
+
+#excelTable {
+    min-width: 600px; /* Menjaga struktur bentuk kolom Excel asli tidak gepeng */
+}
