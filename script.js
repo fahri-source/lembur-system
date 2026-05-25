@@ -15,6 +15,7 @@ window.onload = () => {
     renderFormUI();
     renderAntrian();
     renderTable();
+    renderDetail();
 };
 
 function renderFormUI() {
@@ -144,7 +145,23 @@ document.getElementById('formLembur').addEventListener('submit', function(e) {
     sudahLembur = tempSudah;
 
     // Simpan history lembur hari ini
-    riwayatJadwal.push({ tanggal, shift, data: barisHasil });
+    riwayatJadwal.push({
+        tanggal,
+        shift,
+        data: barisHasil,
+        meta: {
+            intiAbsen: [...intiCheckboxes].map(el => el.value),
+            hadir: Object.values(statusKaryawan).filter(v => v === 'hadir').length,
+            izin: Object.values(statusKaryawan).filter(v => v === 'izin').length,
+            absen: Object.values(statusKaryawan).filter(v => v === 'absen').length,
+            reguler: Object.entries(barisHasil)
+                .filter(([_, value]) => value.class === 'normal')
+                .map(([nama, _]) => nama),
+            penggantiInti: Object.entries(barisHasil)
+                .filter(([_, value]) => value.class === 'hijau')
+                .map(([nama, _]) => nama)
+        }
+    });
     
     // Simpan semua ke localStorage
     localStorage.setItem('belumLembur', JSON.stringify(belumLembur));
@@ -155,6 +172,7 @@ document.getElementById('formLembur').addEventListener('submit', function(e) {
     document.getElementById('formLembur').reset();
     renderAntrian();
     renderTable();
+    renderDetail();
 });
 
 // ================= RENDER TABEL EXCEL =================
@@ -204,5 +222,134 @@ function resetSemua() {
         
         renderAntrian();
         renderTable();
+        renderDetail();
     }
 }
+
+function renderDetail() {
+    const detailTanggal = document.getElementById('detailTanggal');
+    const detailShift = document.getElementById('detailShift');
+    const detailIntiAbsen = document.getElementById('detailIntiAbsen');
+    const detailHadir = document.getElementById('detailHadir');
+    const detailIzin = document.getElementById('detailIzin');
+    const detailAbsen = document.getElementById('detailAbsen');
+    const detailReguler = document.getElementById('detailReguler');
+    const detailPengganti = document.getElementById('detailPengganti');
+
+    if (riwayatJadwal.length === 0) {
+        detailTanggal.textContent = '-';
+        detailShift.textContent = '-';
+        detailIntiAbsen.textContent = '-';
+        detailHadir.textContent = '-';
+        detailIzin.textContent = '-';
+        detailAbsen.textContent = '-';
+        detailReguler.textContent = '-';
+        detailPengganti.textContent = '-';
+        return;
+    }
+
+    const last = riwayatJadwal[riwayatJadwal.length - 1];
+    const meta = last.meta || {
+        intiAbsen: [],
+        hadir: 0,
+        izin: 0,
+        absen: 0,
+        reguler: [],
+        penggantiInti: []
+    };
+
+    detailTanggal.textContent = last.tanggal || '-';
+    detailShift.textContent = last.shift || '-';
+    detailIntiAbsen.textContent = meta.intiAbsen.length ? meta.intiAbsen.join(', ') : '-';
+    detailHadir.textContent = meta.hadir;
+    detailIzin.textContent = meta.izin;
+    detailAbsen.textContent = meta.absen;
+    detailReguler.textContent = meta.reguler.length ? meta.reguler.join(', ') : '-';
+    detailPengganti.textContent = meta.penggantiInti.length ? meta.penggantiInti.join(', ') : '-';
+
+} // ================= FITUR DARK MODE =================
+const themeToggle = document.getElementById('themeToggle');
+// Cek preferensi tema sebelumnya
+const currentTheme = localStorage.getItem('theme');
+if (currentTheme === 'dark') {
+    document.body.classList.add('dark-mode');
+    themeToggle.innerHTML = '☀️ Mode Cerah';
+}
+
+themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    let theme = 'light';
+    
+    if (document.body.classList.contains('dark-mode')) {
+        theme = 'dark';
+        themeToggle.innerHTML = '☀️ Mode Cerah';
+    } else {
+        themeToggle.innerHTML = '🌙 Mode Gelap';
+    }
+    
+    // Simpan pilihan ke localStorage agar tidak hilang saat refresh
+    localStorage.setItem('theme', theme);
+});
+
+// ================= FITUR MODAL DETAIL PEKERJA =================
+const modalDetail = document.getElementById('modalDetail');
+const btnDetailLembur = document.getElementById('btnDetailLembur');
+const closeModal = document.getElementById('closeModal');
+const modalBodyData = document.getElementById('modalBodyData');
+
+// Buka Modal
+// Buka Modal (VERSI REVISI: TABEL MODERN)
+btnDetailLembur.addEventListener('click', () => {
+    if (riwayatJadwal.length === 0) {
+        modalBodyData.innerHTML = `<p style="text-align:center; color:gray;">Belum ada jadwal yang di-generate hari ini.</p>`;
+    } else {
+        // Ambil data dari jadwal yang paling terakhir digenerate
+        const lastJadwal = riwayatJadwal[riwayatJadwal.length - 1];
+        const meta = lastJadwal.meta;
+        
+        // Gabungkan semua karyawan yang lembur hari itu (Reguler + Pengganti Inti)
+        const semuaKaryawanLembur = [...(meta.reguler || []), ...(meta.penggantiInti || [])];
+        
+        let tableRows = '';
+        if (semuaKaryawanLembur.length === 0) {
+            tableRows = `<tr><td colspan="2" style="text-align:center; color:gray; padding: 20px;">Tidak ada karyawan yang lembur</td></tr>`;
+        } else {
+            semuaKaryawanLembur.forEach((nama, index) => {
+                tableRows += `
+                    <tr>
+                        <td style="text-align: center; font-weight: bold; width: 60px;">${index + 1}</td>
+                        <td style="text-align: left; padding-left: 20px;">${nama}</td>
+                    </tr>
+                `;
+            });
+        }
+        
+        let htmlTableContent = `
+            <div style="margin-bottom: 15px; font-size: 13px; color: gray;">
+                <strong>📅 Tanggal:</strong> ${lastJadwal.tanggal} | <strong>Shift:</strong> ${lastJadwal.shift}
+            </div>
+            
+            <h4 class="modal-table-title">karyawan yang lembur</h4>
+            <table class="modal-table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th style="text-align: left; padding-left: 20px;">Nama Karyawan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${tableRows}
+                </tbody>
+            </table>
+        `;
+        modalBodyData.innerHTML = htmlTableContent;
+    }
+    
+// Menutup Modal saat tombol X diklik
+closeModal.addEventListener('click', (e) => {
+    e.preventDefault(); // Mencegah aksi bawaan browser jika ada
+    modalDetail.classList.remove('show');
+});
+
+    modalDetail.classList.add('show');
+});
